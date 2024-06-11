@@ -1,0 +1,213 @@
+#include <iostream>
+#include <vector>
+#include <ctime>
+#include <cstdlib>
+#include <conio.h>
+
+// 方块的形状和颜色
+enum class BlockType {
+    I, J, L, O, S, T, Z
+};
+
+enum class BlockColor {
+    RED, GREEN, BLUE, YELLOW, CYAN, MAGENTA, WHITE
+};
+
+// 方块的坐标
+struct BlockPosition {
+    int x;
+    int y;
+};
+
+// 游戏区域的大小
+const int WIDTH = 10;
+const int HEIGHT = 20;
+
+// 方块的大小
+const int BLOCK_SIZE = 20;
+
+// 游戏状态
+enum class GameState {
+    PLAYING, PAUSED, GAME_OVER
+};
+
+// 游戏类
+class TetrisGame {
+private:
+    // 游戏区域
+    std::vector<std::vector<BlockColor>> board;
+
+    // 当前方块
+    BlockType currentBlock;
+    BlockPosition currentBlockPosition;
+
+    // 下一个方块
+    BlockType nextBlock;
+
+    // 得分
+    int score;
+
+    // 游戏状态
+    GameState state;
+
+    // 随机数生成器
+    std::mt19937 rng;
+
+    // 生成随机方块
+    BlockType generateRandomBlock() {
+        std::uniform_int_distribution<int> distribution(0, 6);
+        return static_cast<BlockType>(distribution(rng));
+    }
+
+    // 检查是否可以移动方块
+    bool canMoveBlock(int x, int y) {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (getBlockCell(x + i, y + j)!= BlockColor::WHITE && board[x + i][y + j]!= BlockColor::WHITE) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // 获取方块的单元格颜色
+    BlockColor getBlockCell(int x, int y) {
+        if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT) {
+            return BlockColor::WHITE;
+        }
+        return board[x][y];
+    }
+
+    // 放置方块
+    void placeBlock() {
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                if (getBlockCell(currentBlockPosition.x + i, currentBlockPosition.y + j)!= BlockColor::WHITE) {
+                    board[currentBlockPosition.x + i][currentBlockPosition.y + j] = static_cast<BlockColor>(currentBlock);
+                }
+            }
+        }
+    }
+
+    // 消除满行
+    void clearLines() {
+        int linesCleared = 0;
+        for (int y = HEIGHT - 1; y >= 0; y--) {
+            bool isLineFull = true;
+            for (int x = 0; x < WIDTH; x++) {
+                if (board[x][y] == BlockColor::WHITE) {
+                    isLineFull = false;
+                    break;
+                }
+            }
+            if (isLineFull) {
+                linesCleared++;
+                for (int x = 0; x < WIDTH; x++) {
+                    board[x][y] = BlockColor::WHITE;
+                }
+                for (int k = y; k > 0; k--) {
+                    for (int x = 0; x < WIDTH; x++) {
+                        board[x][k] = board[x][k - 1];
+                    }
+                }
+            }
+        }
+        score += linesCleared * 10;
+    }
+
+public:
+    // 构造函数
+    TetrisGame() {
+        // 初始化随机数生成器
+        rng.seed(std::time(nullptr));
+
+        // 初始化游戏区域
+        board.resize(WIDTH, std::vector<BlockColor>(HEIGHT, BlockColor::WHITE));
+
+        // 初始化游戏状态
+        state = GameState::PLAYING;
+
+        // 生成第一个方块
+        currentBlock = generateRandomBlock();
+        currentBlockPosition.x = WIDTH / 2 - 2;
+        currentBlockPosition.y = 0;
+
+        // 生成下一个方块
+        nextBlock = generateRandomBlock();
+    }
+
+    // 游戏循环
+    void run() {
+        while (state!= GameState::GAME_OVER) {
+            // 处理输入
+            if (_kbhit()) {
+                char key = _getch();
+                switch (key) {
+                    case 'a':
+                        if (canMoveBlock(currentBlockPosition.x - 1, currentBlockPosition.y)) {
+                            currentBlockPosition.x--;
+                        }
+                        break;
+                    case 'd':
+                        if (canMoveBlock(currentBlockPosition.x + 1, currentBlockPosition.y)) {
+                            currentBlockPosition.x++;
+                        }
+                        break;
+                    case 'w':
+                        if (canMoveBlock(currentBlockPosition.x, currentBlockPosition.y - 1)) {
+                            currentBlockPosition.y--;
+                        }
+                        break;
+                    case's':
+如果（可以移动块（当前块位置.x，当前块位置.y+1））
+当前块位置。y++；
+                        }
+断开；
+案例“P”：
+状态=游戏状态：暂停；
+断开；
+案例Q：
+状态=游戏状态：游戏结束；
+断开；
+                }
+            }
+
+            // 游戏逻辑
+如果（可以移动块（当前块位置.x，当前块位置.y+1））
+当前块位置。y++；
+}否则
+空间块（）
+透明线（）
+当前块=下一个块；
+当前块位置x=宽度/2-2；
+当前块位置y=0
+下一个块=生成随机块（）
+如果可以移动块（当前块位置.x，当前块位置.y））
+状态=游戏状态：游戏结束；
+#包含<iostream>
+#包括《向量》
+
+#包括《cstdlib》
+#包括《康尼奥》
+对于（整数y=0高度y++）
+// 方块的形状和颜色
+枚举类块类型{
+I，我，我，你，我
+};
+            }
+枚举类块颜色{
+红、绿、蓝、黄、青、品红、白
+};
+
+// 方块的坐标
+结构块位置{
+int x;
+整数；
+};
+
+// 游戏区域的大小
+常数宽度=10
+恒定高度=20
+返回0
+// 方块的大小
